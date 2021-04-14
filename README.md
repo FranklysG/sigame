@@ -1,2 +1,2 @@
 # sigame
-Sistema Integrado de gerenciamento AME
+Sistema integrado de gerenciamento ame
