@@ -1,0 +1,19 @@
+.theme-purple .sidebar .legal {
+    background-color: #9c27b0 !important;
+}
+.sidebar .legal {
+    font-weight: bold !important;
+    color: #fff !important;
+}
+
+@media screen and (max-width: 991px){
+    .theme-purple .navbar-brand {
+        line-height: 1em !important;
+    }
+    .navbar-collapse > ul.navbar-nav {
+        display: inline-flex !important;
+        position: absolute !important;
+        top: 12px !important;
+        right: 20px !important;
+    }
+}

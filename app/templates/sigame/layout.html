@@ -93,21 +93,19 @@
     </div>
     <!-- #END# Search Bar -->
 
-
-
     <nav class="nav navbar navbar-expand-lg navbar-dark " style="z-index:999">
         <a href="javascript:void(0);" class="bars p-1"></a>
-        <a class="navbar-brand" href="index.php" style="font-size: 15px;">{title}</a>
+        <a class="navbar-brand font-weight-bold" href="index.php" style="font-size: 20px;">{title}</a>
         <!-- <i style="cursor:pointer" class="fas fa-columns white" onclick="$('body').toggleClass('ls-closed');"></i> -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbartoggle" aria-controls="navbartoggle" aria-expanded="false" aria-label="Toggle navigation">
-          <i style="transform: rotate(90deg);" class="material-icons">compare_arrows</i>
+          <!-- <i style="transform: rotate(90deg);" class="material-icons">compare_arrows</i> -->
         </button>
-        <div class="collapse navbar-collapse" id="navbartoggle">
+        <div class="collapse navbar-collapse show" id="navbartoggle">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                 <!-- Call Search -->
-                <li style="height: 40px;padding-top: 10px;" >
+                <!-- <li style="height: 40px;padding-top: 10px;" >
                     <a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a>
-                </li>
+                </li> -->
                 <!-- #END# Call Search -->
                 <!-- Notifications -->
                  <li class="dropdown messages-menu" id="envelope_messages">
@@ -157,10 +155,10 @@
             <!-- Footer -->
             <div class="legal">
                 <div class="copyright">
-                    {userunitid} - {userunitname}
+                    Posto: {userunitname}
                     <!--[IFADMIN]-->
-                    <a style="cursor:pointer; color: teal !important" generator="adianti" href="index.php?class=SystemModulesCheckView"> <i class="fa fa-code" aria-hidden="true"></i> PHP Modules </a> &nbsp;&nbsp;
-                    <span style="cursor:pointer; color: teal !important" onclick="Adianti.showDebugPanel()"> <i class="fa fa-window-maximize" aria-hidden="true"></i> Debug Console </span>
+                    <!-- <a style="cursor:pointer; color: teal !important" generator="adianti" href="index.php?class=SystemModulesCheckView"> <i class="fa fa-code" aria-hidden="true"></i> PHP Modules </a> &nbsp;&nbsp; -->
+                    <!-- <span style="cursor:pointer; color: teal !important" onclick="Adianti.showDebugPanel()"> <i class="fa fa-window-maximize" aria-hidden="true"></i> Debug Console </span> -->
                     <!--[/IFADMIN]-->
                 </div>
             </div>

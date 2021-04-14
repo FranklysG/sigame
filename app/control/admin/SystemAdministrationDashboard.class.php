@@ -29,10 +29,10 @@ class SystemAdministrationDashboard extends TPage
             $indicator3 = new THtmlRenderer('app/resources/info-box.html');
             $indicator4 = new THtmlRenderer('app/resources/info-box.html');
             
-            $indicator1->enableSection('main', ['title' => _t('Users'),    'icon' => 'user',       'background' => 'orange', 'value' => SystemUser::count()]);
-            $indicator2->enableSection('main', ['title' => _t('Groups'),   'icon' => 'users',      'background' => 'blue',   'value' => SystemGroup::count()]);
-            $indicator3->enableSection('main', ['title' => _t('Units'),    'icon' => 'university', 'background' => 'purple', 'value' => SystemUnit::count()]);
-            $indicator4->enableSection('main', ['title' => _t('Programs'), 'icon' => 'code',       'background' => 'green',  'value' => SystemProgram::count()]);
+            $indicator1->enableSection('main', ['title' => 'Atendidos HOJE',    'icon' => 'user',       'background' => 'orange', 'value' => SystemUser::count()]);
+            $indicator2->enableSection('main', ['title' => 'Atendidos MÊS',   'icon' => 'users',      'background' => 'blue',   'value' => SystemGroup::count()]);
+            $indicator3->enableSection('main', ['title' => 'Atendidos',    'icon' => 'user', 'background' => 'purple', 'value' => SystemUnit::count()]);
+            $indicator4->enableSection('main', ['title' => 'Remarcados', 'icon' => 'user',       'background' => 'green',  'value' => SystemProgram::count()]);
             
             $chart1 = new THtmlRenderer('app/resources/google_bar_chart.html');
             $data1 = [];
