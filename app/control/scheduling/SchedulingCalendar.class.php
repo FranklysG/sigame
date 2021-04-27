@@ -33,8 +33,8 @@ class SchedulingCalendar extends TPage
             
             foreach ($objects as $object) {
                 $obj  = (object) ['title'=>'Event 1',  'person' => 'Mary', 'description' => 'Complementary description'];
-                $hexaColor = AppUtil::GenerateHexaColor();
-                $this->fc->addEvent($object->id, 'Event', $object->start_time, $object->end_time, null, $hexaColor, $obj);
+                // $hexaColor = AppUtil::GenerateHexaColor();
+                $this->fc->addEvent($object->id, 'Event', $object->start_time, $object->end_time, null, $object->hexacolor, $obj);
             }
 
         } catch (Exeption $e) {

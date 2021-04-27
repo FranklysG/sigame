@@ -21,6 +21,7 @@ class Scheduling extends TRecord
         parent::__construct($id, $callObjectLoad);
         parent::addAttribute('system_user_id');
         parent::addAttribute('forwarding_id');
+        parent::addAttribute('hexacolor');
         parent::addAttribute('start_time');
         parent::addAttribute('end_time');
         parent::addAttribute('created_at');
