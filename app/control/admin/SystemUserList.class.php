@@ -47,16 +47,12 @@ class SystemUserList extends TStandardList
         $active->addItems( [ 'Y' => _t('Yes'), 'N' => _t('No') ] );
         
         // add the fields
-        $this->form->addFields( [new TLabel('Id')], [$id] );
-        $this->form->addFields( [new TLabel(_t('Name'))], [$name] );
-        $this->form->addFields( [new TLabel(_t('Email'))], [$email] );
-        $this->form->addFields( [new TLabel(_t('Active'))], [$active] );
+        $this->form->addFields( [$id] );
+        $this->form->addFields( [new TLabel(_t('Name')), $name],
+                                [new TLabel(_t('Email')), $email],
+                                [new TLabel(_t('Active')), $active] );
         
-        $id->setSize('30%');
-        $name->setSize('70%');
-        $email->setSize('70%');
-        $active->setSize('70%');
-        
+        $row->layout = ['col-sm-4','col-sm-4','col-sm-4'];
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue('SystemUser_filter_data') );
         

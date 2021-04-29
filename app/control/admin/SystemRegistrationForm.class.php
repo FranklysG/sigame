@@ -24,42 +24,46 @@ class SystemRegistrationForm extends TPage
         
         // creates the form
         $this->form = new BootstrapFormBuilder('form_registration');
-        $this->form->setFormTitle( _t('User registration') );
+        $this->form->setFormTitle('Registro de conta');
+        $this->form->setFieldSizes('100%');
         
         // create the form fields
         $login      = new TEntry('login');
+        $login->addValidation( _t('Login'), new TRequiredValidator);
         $name       = new TEntry('name');
+        $name->addValidation( _t('Name'), new TRequiredValidator);
+        $criteria = new TCriteria();
+        $criteria->add(new TFilter('id','NOT IN',[1,2]));
+        $group_id       = new TDBCombo('group_id','permission','SystemGroup','id','name', null, $criteria);
+        $group_id->addValidation( 'Formação', new TRequiredValidator);
+        $unit_id       = new TDBCombo('unit_id','permission','SystemUnit','id','name');
+        $unit_id->addValidation( 'Unidade', new TRequiredValidator);
         $email      = new TEntry('email');
+        $email->addValidation( _t('Email'), new TRequiredValidator);
         $password   = new TPassword('password');
+        $password->addValidation( _t('Password'), new TRequiredValidator);
         $repassword = new TPassword('repassword');
+        $repassword->addValidation( _t('Password confirmation'), new TRequiredValidator);
         
         $this->form->addAction( _t('Save'),  new TAction([$this, 'onSave']), 'far:save')->{'class'} = 'btn btn-sm btn-primary';
         $this->form->addAction( _t('Clear'), new TAction([$this, 'onClear']), 'fa:eraser red' );
-        //$this->form->addActionLink( _t('Back'),  new TAction(['LoginForm','onReload']), 'far:arrow-alt-circle-left blue' );
+        // $this->form->addAction( _t('Back'),  new TAction(['LoginForm','onReload']), 'far:arrow-alt-circle-left blue' );
         
-        $login->addValidation( _t('Login'), new TRequiredValidator);
-        $name->addValidation( _t('Name'), new TRequiredValidator);
-        $email->addValidation( _t('Email'), new TRequiredValidator);
-        $password->addValidation( _t('Password'), new TRequiredValidator);
-        $repassword->addValidation( _t('Password confirmation'), new TRequiredValidator);
         
-        // define the sizes
-        $name->setSize('100%');
-        $login->setSize('100%');
-        $password->setSize('100%');
-        $repassword->setSize('100%');
-        $email->setSize('100%');
-        
-        $this->form->addFields( [new TLabel(_t('Login'), 'red')],    [$login] );
-        $this->form->addFields( [new TLabel(_t('Name'), 'red')],     [$name] );
-        $this->form->addFields( [new TLabel(_t('Email'), 'red')],    [$email] );
-        $this->form->addFields( [new TLabel(_t('Password'), 'red')], [$password] );
-        $this->form->addFields( [new TLabel(_t('Password confirmation'), 'red')], [$repassword] );
-        
+        $row = $this->form->addFields( [new TLabel(_t('Login')),$login]
+                                ,[new TLabel(_t('Name')), $name]
+                                ,[new TLabel('Formação'), $group_id]
+                                ,[new TLabel('Unidade'), $unit_id]
+                                ,[new TLabel(_t('Email')),$email]
+                                ,[new TLabel(_t('Password')), $password]
+                                ,[new TLabel(_t('Password confirmation')), $repassword]
+                             );
+        $row->layout = ['col-sm-6','col-sm-6','col-sm-6','col-sm-6','col-sm-12','col-sm-6','col-sm-6'];
+
         // add the container to the page
         $wrapper = new TElement('div');
         $wrapper->style = 'margin:auto; margin-top:100px;max-width:600px;';
-        $wrapper->id    = 'login-wrapper';
+        // $wrapper->id    = 'login-wrapper';
         $wrapper->add($this->form);
         
         // add the wrapper to the page
@@ -132,32 +136,16 @@ class SystemRegistrationForm extends TPage
             }
             
             $object = new SystemUser;
-            $object->active = 'Y';
+            $object->active = 'N';
             $object->fromArray( $param );
             $object->password = md5($object->password);
+            $object->system_unit_id = $param['unit_id'];
             $object->frontpage_id = $ini['permission']['default_screen'];
             $object->clearParts();
             $object->store();
-            
-            $default_groups = explode(',', $ini['permission']['default_groups']);
-            
-            if( count($default_groups) > 0 )
-            {
-                foreach( $default_groups as $group_id )
-                {
-                    $object->addSystemUserGroup( new SystemGroup($group_id) );
-                }
-            }
-            
-            $default_units = explode(',', $ini['permission']['default_units']);
-            
-            if( count($default_units) > 0 )
-            {
-                foreach( $default_units as $unit_id )
-                {
-                    $object->addSystemUserUnit( new SystemUnit($unit_id) );
-                }
-            }
+
+            $object->addSystemUserGroup(SystemGroup::find($param['group_id']));
+            $object->addSystemUserUnit(SystemUnit::find($param['unit_id']));
             
             TTransaction::close(); // close the transaction
             $pos_action = new TAction(['LoginForm', 'onLoad']);

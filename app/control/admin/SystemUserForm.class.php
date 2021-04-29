@@ -25,9 +25,10 @@ class SystemUserForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder('form_System_user');
         $this->form->setFormTitle( _t('User') );
+        $this->form->setFieldSizes('100%');
         
         // create the form fields
-        $id            = new TEntry('id');
+        $id            = new THidden('id');
         $name          = new TEntry('name');
         $login         = new TEntry('login');
         $password      = new TPassword('password');
@@ -60,27 +61,14 @@ class SystemUserForm extends TPage
         $btn->class = 'btn btn-sm btn-primary';
         $this->form->addActionLink( _t('Clear'), new TAction(array($this, 'onEdit')), 'fa:eraser red');
         $this->form->addActionLink( _t('Back'), new TAction(array('SystemUserList','onReload')), 'far:arrow-alt-circle-left blue');
-        
-        // define the sizes
-        $id->setSize('50%');
-        $name->setSize('100%');
-        $login->setSize('100%');
-        $password->setSize('100%');
-        $repassword->setSize('100%');
-        $email->setSize('100%');
-        $unit_id->setSize('100%');
-        $frontpage_id->setSize('100%');
-        $frontpage_id->setMinLength(1);
-        
-        // outros
-        $id->setEditable(false);
-        
+    
         // validations
         $name->addValidation(_t('Name'), new TRequiredValidator);
         $login->addValidation('Login', new TRequiredValidator);
         $email->addValidation('Email', new TEmailValidator);
         
-        $this->form->addFields( [new TLabel('ID')], [$id],  [new TLabel(_t('Name'))], [$name] );
+        $this->form->addFields( [$id]);
+        $this->form->addFields( [new TLabel(_t('Name'))], [$name] );
         $this->form->addFields( [new TLabel(_t('Login'))], [$login],  [new TLabel(_t('Email'))], [$email] );
         $this->form->addFields( [new TLabel(_t('Main unit'))], [$unit_id],  [new TLabel(_t('Front page'))], [$frontpage_id] );
         $this->form->addFields( [new TLabel(_t('Password'))], [$password],  [new TLabel(_t('Password confirmation'))], [$repassword] );
