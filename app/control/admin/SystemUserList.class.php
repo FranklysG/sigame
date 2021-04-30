@@ -39,7 +39,7 @@ class SystemUserList extends TStandardList
         
 
         // create the form fields
-        $id = new TEntry('id');
+        $id = new THidden('id');
         $name = new TEntry('name');
         $email = new TEntry('email');
         $active = new TCombo('active');
@@ -48,7 +48,7 @@ class SystemUserList extends TStandardList
         
         // add the fields
         $this->form->addFields( [$id] );
-        $this->form->addFields( [new TLabel(_t('Name')), $name],
+        $row = $this->form->addFields( [new TLabel(_t('Name')), $name],
                                 [new TLabel(_t('Email')), $email],
                                 [new TLabel(_t('Active')), $active] );
         

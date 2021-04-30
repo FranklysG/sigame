@@ -1,6 +1,6 @@
 <?php
 /**
- * PublicView
+ * RegisterHoliday
  *
  * @version    1.0
  * @package    control
@@ -9,12 +9,15 @@
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
-class PublicView extends TPage
+class RegisterHoliday extends TPage
 {
     public function __construct()
     {
         parent::__construct();
         
+    }
+
+    public function register(){
         try{
             TTransaction::open('app');
             $preference = SystemPreference::find('link_api');
@@ -49,8 +52,5 @@ class PublicView extends TPage
             new TMessage('warning', 'Parece que o link da api não está disponivel', $e->getMessage());
             TTransaction::rollback();
         }
-        
-        // add the template to the page
-        // parent::add( $panel );
     }
 }
