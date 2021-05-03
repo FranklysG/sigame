@@ -20,7 +20,7 @@ class SchedulingCalendar extends TPage
     {
         parent::__construct();
         $this->fc = new TFullCalendar(date('Y-m-d'), 'month');
-        $this->fc->setTimeRange( '06:00:00', '20:00:00' );
+        $this->fc->setTimeRange( '08:00:00', '17:00:00' );
         $this->fc->enablePopover( 'Title {title}', '<b>{title}</b> <br> <i class="fa fa-user" aria-hidden="true"></i> {person} <br> {description}');
         
         try {
