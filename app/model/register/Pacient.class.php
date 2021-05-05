@@ -10,7 +10,6 @@ class Pacient extends TRecord
     const IDPOLICY =  'max'; // {max, serial}
     
     
-    private $adrresss;
     private $system_user;
     private $attendances;
 
@@ -22,7 +21,6 @@ class Pacient extends TRecord
         parent::__construct($id, $callObjectLoad);
         parent::addAttribute('system_user_id');
         parent::addAttribute('type_paciente_id');
-        parent::addAttribute('adrress_id');
         parent::addAttribute('matrial_status');
         parent::addAttribute('pacient_name');
         parent::addAttribute('mother_name');
@@ -48,26 +46,6 @@ class Pacient extends TRecord
         parent::addAttribute('updated_at');
     }
 
-    
-    /**
-     * Method addAdrress
-     * Add a Adrress to the Pacient
-     * @param $object Instance of Adrress
-     */
-    public function addAdrress(Adrress $object)
-    {
-        $this->adrresss[] = $object;
-    }
-    
-    /**
-     * Method getAdrresss
-     * Return the Pacient' Adrress's
-     * @return Collection of Adrress
-     */
-    public function getAdrresss()
-    {
-        return $this->adrresss;
-    }
     
     /**
      * Method set_system_user
@@ -121,7 +99,6 @@ class Pacient extends TRecord
      */
     public function clearParts()
     {
-        $this->adrresss = array();
         $this->attendances = array();
     }
 
@@ -131,12 +108,6 @@ class Pacient extends TRecord
      */
     public function load($id)
     {
-    
-        // load the related Adrress objects
-        $repository = new TRepository('Adrress');
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('pacient_id', '=', $id));
-        $this->adrresss = $repository->load($criteria);
     
         // load the related Attendance objects
         $repository = new TRepository('Attendance');
@@ -156,21 +127,6 @@ class Pacient extends TRecord
         // store the object itself
         parent::store();
     
-        // delete the related Adrress objects
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('pacient_id', '=', $this->id));
-        $repository = new TRepository('Adrress');
-        $repository->delete($criteria);
-        // store the related Adrress objects
-        if ($this->adrresss)
-        {
-            foreach ($this->adrresss as $adrress)
-            {
-                unset($adrress->id);
-                $adrress->pacient_id = $this->id;
-                $adrress->store();
-            }
-        }
         // delete the related Attendance objects
         $criteria = new TCriteria;
         $criteria->add(new TFilter('pacient_id', '=', $this->id));
@@ -195,12 +151,6 @@ class Pacient extends TRecord
     public function delete($id = NULL)
     {
         $id = isset($id) ? $id : $this->id;
-        // delete the related Adrress objects
-        $repository = new TRepository('Adrress');
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('pacient_id', '=', $id));
-        $repository->delete($criteria);
-        
         // delete the related Attendance objects
         $repository = new TRepository('Attendance');
         $criteria = new TCriteria;

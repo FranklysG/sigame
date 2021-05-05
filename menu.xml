@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu>
-  <menuitem label="Paciente">
-    <icon>fas:notes-medical fa-fw</icon>
+  <menuitem label="Agendamentos">
+    <action>SchedulingCalendar</action>
+    <icon>fas:calendar-plus fa-fw</icon>
+  </menuitem>
+  <menuitem label="UBS">
+    <icon>fas:clinic-medical fa-fw</icon>
     <menu>
-      <menuitem label="Dashboard">
-        <action>SystemAdministrationDashboard</action>
-        <icon>fas:tachometer-alt fa-fw</icon>
+      <menuitem label="Atendimento">
+        <action>AttendanceList</action>
+        <icon>fas:file-medical-alt fa-fw</icon>
       </menuitem>
-      <menuitem label="Agendamentos">
-        <action>SchedulingCalendar</action>
-        <icon>fas:calendar-plus fa-fw</icon>
+      <menuitem label="Encaminhamento">
+        <action>ForwardingList</action>
+        <icon>fas:file-contract fa-fw</icon>
+      </menuitem>
+      <menuitem label="Paciente">
+        <action>PacientList</action>
+        <icon>fas:notes-medical fa-fw</icon>
       </menuitem>
     </menu>
   </menuitem>
