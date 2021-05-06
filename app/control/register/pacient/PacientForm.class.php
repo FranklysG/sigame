@@ -14,6 +14,7 @@ class PacientForm extends TPage
     public function __construct( $param )
     {
         parent::__construct();
+        parent::setTargetContainer('adianti_right_panel');
         
         
         // creates the form
@@ -29,8 +30,13 @@ class PacientForm extends TPage
 
         // create the form fields
         $id = new TEntry('id');
-        $type_paciente_id = new TDBUniqueSearch('type_paciente_id','app', 'PacienteType', 'id', 'name');
-        $type_paciente_id->setMinLength(0);
+        $pacient_type = new TCombo('pacient_type');
+        $pacient_type->addItems([
+            '0' => 'Criança',
+            '1' => 'Gestante',
+        ]);
+        $pacient_type->setValue(1);
+        $pacient_type->setChangeAction(new TAction(array($this, 'onChangeType')));
         $matrial_status = new TCombo('matrial_status');
         $matrial_status->addItems([
             '0' => 'Solteiro(a)',
@@ -76,29 +82,28 @@ class PacientForm extends TPage
 
 
         // add the fields
-        $this->form->addFields( [ new TLabel('N° Pacinte'), $id ], [ new TLabel('Tipo Paciente'), $type_paciente_id ] );
-        $this->form->addFields( [ new TLabel('Estado civil'), $matrial_status ] );
-        $this->form->addFields( [ new TLabel('Nome'), $pacient_name ] );
-        $this->form->addFields( [ new TLabel('Nome da mãe'), $mother_name ] );
-        $this->form->addFields( [ new TLabel('Uaps'), $uaps ] );
-        $this->form->addFields( [ new TLabel('Microarea'), $microarea ] );
-        $this->form->addFields( [ new TLabel('Data de nascimento'), $birthday ] );
-        $this->form->addFields( [ new TLabel('Grau de escolaridade'), $schooling ] );
-        $this->form->addFields( [ new TLabel('Ocupação'), $occupation ] );
-        $this->form->addFields( [ new TLabel('Ultima Menstruação'), $last_menstruation ] );
-        $this->form->addFields( [ new TLabel('Data do Nascimento'), $probably_birth ] );
-        $this->form->addFields( [ new TLabel('Parto Normal'), $normal_birth ] );
-        $this->form->addFields( [ new TLabel('Alteração no desenvolvimento fetal'), $change_fetal_dev ] );
-        $this->form->addFields( [ new TLabel('Peso Pré-Gestacional'), $gestational_weight ] );
-        $this->form->addFields( [ new TLabel('Peso Atual'), $current_weight ] );
-        $this->form->addFields( [ new TLabel('Altura'), $height ] );
-        $this->form->addFields( [ new TLabel('Historico reprodutivo'), $reproductive_history ] );
-        $this->form->addFields( [ new TLabel('Jornada / dia'), $journey_day ] );
-        $this->form->addFields( [ new TLabel('Cns'), $cns ] );
-        $this->form->addFields( [ new TLabel('Prontuario'), $medical_record ] );
-        $this->form->addFields( [ new TLabel('Bolsa Familia'), $bolsa_familia ] );
-        $this->form->addFields( [ new TLabel('Tipo de parto'), $birth_type ] );
-        $this->form->addFields( [ new TLabel('Data do Registro'), $created_at ] );
+        $this->form->addFields( [ new TLabel('N°'), $id ], [ new TLabel('Tipo Paciente'), $pacient_type ] );
+        $this->form->addFields( [ new TLabel('NOME'), $pacient_name ] );
+        $this->form->addFields( [ new TLabel('NOME DA MÃE'), $mother_name ] );
+        $this->form->addFields( [ new TLabel('ESTADO CIVIL'), $matrial_status ] );
+        $this->form->addFields( [ new TLabel('UAPS'), $uaps ] );
+        $this->form->addFields( [ new TLabel('MICROAREA'), $microarea ] );
+        $this->form->addFields( [ new TLabel('DATA DE NASCIMENTO'), $birthday ] );
+        $this->form->addFields( [ new TLabel('GRAU DE ESCOLARIDADE'), $schooling ] );
+        $this->form->addFields( [ new TLabel('OCUPAÇÃO'), $occupation ] );
+        $this->form->addFields( [ new TLabel('ULTIMA MENSTRUAÇÃO'), $last_menstruation ] );
+        $this->form->addFields( [ new TLabel('DATA DO NASCIMENTO'), $probably_birth ] );
+        $this->form->addFields( [ new TLabel('PARTO NORMAL'), $normal_birth ] );
+        $this->form->addFields( [ new TLabel('ALTERAÇÃO NO DESENVOLVIMENTO FETAL'), $change_fetal_dev ] );
+        $this->form->addFields( [ new TLabel('PESO PRÉ-GESTACIONAL'), $gestational_weight ] );
+        $this->form->addFields( [ new TLabel('PESO ATUAL'), $current_weight ] );
+        $this->form->addFields( [ new TLabel('ALTURA'), $height ] );
+        $this->form->addFields( [ new TLabel('HISTORICO REPRODUTIVO'), $reproductive_history ] );
+        $this->form->addFields( [ new TLabel('JORNADA / DIA'), $journey_day ] );
+        $this->form->addFields( [ new TLabel('CNS'), $cns ] );
+        $this->form->addFields( [ new TLabel('PRONTUARIO'), $medical_record ] );
+        $this->form->addFields( [ new TLabel('BOLSA FAMILIA'), $bolsa_familia ] );
+        $this->form->addFields( [ new TLabel('TIPO DE PARTO'), $birth_type ] );
 
         $id->setEditable(FALSE);
         if (!empty($id))
@@ -114,7 +119,7 @@ class PacientForm extends TPage
         $btn = $this->form->addAction(_t('Save'), new TAction([$this, 'onSave']), 'fa:save');
         $btn->class = 'btn btn-sm btn-primary';
         $this->form->addActionLink(_t('New'),  new TAction([$this, 'onEdit']), 'fa:eraser red');
-        
+        $this->form->addHeaderActionLink( _t('Close'), new TAction(array($this, 'onClose')), 'fa:times red');
         // vertical box container
         $container = new TVBox;
         $container->style = 'width: 100%';
@@ -124,6 +129,57 @@ class PacientForm extends TPage
         parent::add($container);
     }
 
+    public static function onChangeType($param)
+    {
+        if ($param['pacient_type'] == '0')
+        {
+            TQuickForm::hideField('form_Pacient', 'matrial_status');
+            TQuickForm::showField('form_Pacient', 'pacient_name');
+            TQuickForm::showField('form_Pacient', 'mother_name');
+            TQuickForm::showField('form_Pacient', 'uaps');
+            TQuickForm::showField('form_Pacient', 'microarea');
+            TQuickForm::showField('form_Pacient', 'birthday');
+            TQuickForm::hideField('form_Pacient', 'schooling');
+            TQuickForm::hideField('form_Pacient', 'occupation');
+            TQuickForm::hideField('form_Pacient', 'last_menstruation');
+            TQuickForm::hideField('form_Pacient', 'probably_birth');
+            TQuickForm::hideField('form_Pacient', 'normal_birth');
+            TQuickForm::hideField('form_Pacient', 'change_fetal_dev');
+            TQuickForm::hideField('form_Pacient', 'gestational_weight');
+            TQuickForm::showField('form_Pacient', 'current_weight');
+            TQuickForm::showField('form_Pacient', 'height');
+            TQuickForm::hideField('form_Pacient', 'reproductive_history');
+            TQuickForm::hideField('form_Pacient', 'journey_day');
+            TQuickForm::showField('form_Pacient', 'cns');
+            TQuickForm::showField('form_Pacient', 'medical_record');
+            TQuickForm::hideField('form_Pacient', 'bolsa_familia');
+            TQuickForm::hideField('form_Pacient', 'birth_type');
+        }
+        else
+        {
+            TQuickForm::showField('form_Pacient', 'matrial_status');
+            TQuickForm::showField('form_Pacient', 'pacient_name');
+            TQuickForm::hideField('form_Pacient', 'mother_name');
+            TQuickForm::hideField('form_Pacient', 'uaps');
+            TQuickForm::hideField('form_Pacient', 'microarea');
+            TQuickForm::hideField('form_Pacient', 'birthday');
+            TQuickForm::showField('form_Pacient', 'schooling');
+            TQuickForm::showField('form_Pacient', 'occupation');
+            TQuickForm::showField('form_Pacient', 'last_menstruation');
+            TQuickForm::showField('form_Pacient', 'probably_birth');
+            TQuickForm::showField('form_Pacient', 'normal_birth');
+            TQuickForm::showField('form_Pacient', 'change_fetal_dev');
+            TQuickForm::showField('form_Pacient', 'gestational_weight');
+            TQuickForm::hideField('form_Pacient', 'current_weight');
+            TQuickForm::hideField('form_Pacient', 'height');
+            TQuickForm::showField('form_Pacient', 'reproductive_history');
+            TQuickForm::showField('form_Pacient', 'journey_day');
+            TQuickForm::hideField('form_Pacient', 'cns');
+            TQuickForm::hideField('form_Pacient', 'medical_record');
+            TQuickForm::showField('form_Pacient', 'bolsa_familia');
+            TQuickForm::showField('form_Pacient', 'birth_type');
+        }
+    }
     /**
      * Save form data
      * @param $param Request
@@ -186,7 +242,12 @@ class PacientForm extends TPage
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('app'); // open a transaction
                 $object = new Pacient($key); // instantiates the Active Record
+                
+                // TForm::sendData('form_Pacient', $object->pacient_type);
                 $this->form->setData($object); // fill the form
+                
+                $param['pacient_type'] = $object->pacient_type;
+                $this->onChangeType($param);
                 TTransaction::close(); // close the transaction
             }
             else
@@ -199,5 +260,11 @@ class PacientForm extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
             TTransaction::rollback(); // undo all pending operations
         }
+    }
+
+    public static function onClose($param)
+    {
+        TScript::create("Template.closeRightPanel()");
+        new TMessage('info', 'Você sera redirecionado para listagem de pacientes', new TAction(['PacientList', 'onReload']));
     }
 }

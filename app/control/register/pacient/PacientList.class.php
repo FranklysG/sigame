@@ -22,7 +22,8 @@ class PacientList extends TPage
         
         // creates the form
         $this->form = new BootstrapFormBuilder('form_search_Pacient');
-        $this->form->setFormTitle('Pacient');
+        $this->form->setFormTitle('Todos os pacientes');
+        $this->form->setFieldSizes('100%');
         
 
         // create the form fields
@@ -37,25 +38,10 @@ class PacientList extends TPage
 
 
         // add the fields
-        $this->form->addFields( [ new TLabel('System User Id') ], [ $system_user_id ] );
-        $this->form->addFields( [ new TLabel('Type Paciente Id') ], [ $type_paciente_id ] );
-        $this->form->addFields( [ new TLabel('Pacient Name') ], [ $pacient_name ] );
-        $this->form->addFields( [ new TLabel('Mother Name') ], [ $mother_name ] );
-        $this->form->addFields( [ new TLabel('Uaps') ], [ $uaps ] );
-        $this->form->addFields( [ new TLabel('Birthday') ], [ $birthday ] );
-        $this->form->addFields( [ new TLabel('Cns') ], [ $cns ] );
-        $this->form->addFields( [ new TLabel('Bolsa Familia') ], [ $bolsa_familia ] );
-
-
-        // set sizes
-        $system_user_id->setSize('100%');
-        $type_paciente_id->setSize('100%');
-        $pacient_name->setSize('100%');
-        $mother_name->setSize('100%');
-        $uaps->setSize('100%');
-        $birthday->setSize('100%');
-        $cns->setSize('100%');
-        $bolsa_familia->setSize('100%');
+        $this->form->addFields( [ new TLabel('Nome'), $pacient_name ],
+                                [ new TLabel('Uaps'), $uaps ],
+                                [ new TLabel('Cns'), $cns ],
+                                [ new TLabel('Bolsa Familia'), $bolsa_familia ] );
 
         
         // keep the form filled during navigation with session data
@@ -74,61 +60,70 @@ class PacientList extends TPage
         
 
         // creates the datagrid columns
-        $column_id = new TDataGridColumn('id', 'Id', 'right');
-        $column_system_user_id = new TDataGridColumn('system_user_id', 'System User Id', 'right');
-        $column_type_paciente_id = new TDataGridColumn('type_paciente_id', 'Type Paciente Id', 'right');
-        $column_matrial_status = new TDataGridColumn('matrial_status', 'Matrial Status', 'left');
-        $column_pacient_name = new TDataGridColumn('pacient_name', 'Pacient Name', 'left');
-        $column_mother_name = new TDataGridColumn('mother_name', 'Mother Name', 'left');
-        $column_uaps = new TDataGridColumn('uaps', 'Uaps', 'left');
-        $column_microarea = new TDataGridColumn('microarea', 'Microarea', 'left');
-        $column_birthday = new TDataGridColumn('birthday', 'Birthday', 'left');
-        $column_schooling = new TDataGridColumn('schooling', 'Schooling', 'left');
-        $column_occupation = new TDataGridColumn('occupation', 'Occupation', 'left');
-        $column_last_menstruation = new TDataGridColumn('last_menstruation', 'Last Menstruation', 'left');
-        $column_probably_birth = new TDataGridColumn('probably_birth', 'Probably Birth', 'left');
-        $column_normal_birth = new TDataGridColumn('normal_birth', 'Normal Birth', 'left');
-        $column_change_fetal_dev = new TDataGridColumn('change_fetal_dev', 'Change Fetal Dev', 'left');
-        $column_gestational_weight = new TDataGridColumn('gestational_weight', 'Gestational Weight', 'left');
-        $column_current_weight = new TDataGridColumn('current_weight', 'Current Weight', 'left');
-        $column_height = new TDataGridColumn('height', 'Height', 'left');
-        $column_reproductive_history = new TDataGridColumn('reproductive_history', 'Reproductive History', 'left');
-        $column_journey_day = new TDataGridColumn('journey_day', 'Journey Day', 'left');
+        $column_id = new TDataGridColumn('id', 'N°', 'left');
+        $column_system_user_id = new TDataGridColumn('system_user->name', 'RESPONSAVEL', 'left');
+        $column_pacient_type = new TDataGridColumn('pacient_tipe', 'PACIENTE', 'left');
+        $column_matrial_status = new TDataGridColumn('matrial_status', 'ESTADO CIVIL', 'left');
+        $column_pacient_name = new TDataGridColumn('pacient_name', 'NOME', 'left');
+        $column_mother_name = new TDataGridColumn('mother_name', 'NOME DA MÃE', 'left');
+        $column_uaps = new TDataGridColumn('uaps', 'UAPS', 'left');
+        $column_microarea = new TDataGridColumn('microarea', 'MICROAREA', 'left');
+        $column_birthday = new TDataGridColumn('birthday', 'DT. NASCIMENTO', 'left');
+        $column_schooling = new TDataGridColumn('schooling', 'GRAU DE ESCOLARIDADE', 'left');
+        $column_occupation = new TDataGridColumn('occupation', 'OCUPAÇÃO', 'left');
+        $column_last_menstruation = new TDataGridColumn('last_menstruation', 'ULTIMA MENSTRUAÇÃO', 'left');
+        $column_probably_birth = new TDataGridColumn('probably_birth', 'DT. PROVAVEL PARA NASCIMENTO', 'left');
+        $column_normal_birth = new TDataGridColumn('normal_birth', 'PARTO NORMAL', 'left');
+        $column_change_fetal_dev = new TDataGridColumn('change_fetal_dev', 'ALTERAÇÃO DURANTE O DESENVOLVIMENTO DO FETO', 'left');
+        $column_gestational_weight = new TDataGridColumn('gestational_weight', 'PESO GESTACIONAL', 'left');
+        $column_current_weight = new TDataGridColumn('current_weight', 'PESO ATUAL', 'left');
+        $column_height = new TDataGridColumn('height', 'ALTURA', 'left');
+        $column_reproductive_history = new TDataGridColumn('reproductive_history', 'HISTORICO REPRODUTIVO', 'left');
+        $column_journey_day = new TDataGridColumn('journey_day', 'JORNADA/DIA', 'left');
         $column_cns = new TDataGridColumn('cns', 'Cns', 'left');
-        $column_medical_record = new TDataGridColumn('medical_record', 'Medical Record', 'left');
-        $column_bolsa_familia = new TDataGridColumn('bolsa_familia', 'Bolsa Familia', 'left');
-        $column_birth_type = new TDataGridColumn('birth_type', 'Birth Type', 'left');
-        $column_created_at = new TDataGridColumn('created_at', 'Created At', 'left');
-        $column_updated_at = new TDataGridColumn('updated_at', 'Updated At', 'left');
+        $column_medical_record = new TDataGridColumn('medical_record', 'PRONTUARIO', 'left');
+        $column_bolsa_familia = new TDataGridColumn('bolsa_familia', 'BOLSA FAMILIA', 'left');
+        $column_birth_type = new TDataGridColumn('birth_type', 'TIPO DE PARTO', 'left');
+        $column_created_at = new TDataGridColumn('created_at', 'DT. REGISTRO', 'left');
+        $column_updated_at = new TDataGridColumn('updated_at', 'ULTIMA ATUALIZAÇÃO', 'left');
 
+        $column_pacient_type->setTransformer(function($value){
+            return 'Criança';
+            if($value <> 0) return 'Gestante';
+        });
+        
+        $column_created_at->setTransformer(function($value){
+            return Convert::toDate($value);
+        });
+        
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_system_user_id);
-        $this->datagrid->addColumn($column_type_paciente_id);
-        $this->datagrid->addColumn($column_matrial_status);
+        $this->datagrid->addColumn($column_pacient_type);
+        // $this->datagrid->addColumn($column_matrial_status);
         $this->datagrid->addColumn($column_pacient_name);
-        $this->datagrid->addColumn($column_mother_name);
+        // $this->datagrid->addColumn($column_mother_name);
         $this->datagrid->addColumn($column_uaps);
-        $this->datagrid->addColumn($column_microarea);
-        $this->datagrid->addColumn($column_birthday);
-        $this->datagrid->addColumn($column_schooling);
-        $this->datagrid->addColumn($column_occupation);
-        $this->datagrid->addColumn($column_last_menstruation);
-        $this->datagrid->addColumn($column_probably_birth);
-        $this->datagrid->addColumn($column_normal_birth);
-        $this->datagrid->addColumn($column_change_fetal_dev);
-        $this->datagrid->addColumn($column_gestational_weight);
-        $this->datagrid->addColumn($column_current_weight);
-        $this->datagrid->addColumn($column_height);
-        $this->datagrid->addColumn($column_reproductive_history);
-        $this->datagrid->addColumn($column_journey_day);
+        // $this->datagrid->addColumn($column_microarea);
+        // $this->datagrid->addColumn($column_birthday);
+        // $this->datagrid->addColumn($column_schooling);
+        // $this->datagrid->addColumn($column_occupation);
+        // $this->datagrid->addColumn($column_last_menstruation);
+        // $this->datagrid->addColumn($column_probably_birth);
+        // $this->datagrid->addColumn($column_normal_birth);
+        // $this->datagrid->addColumn($column_change_fetal_dev);
+        // $this->datagrid->addColumn($column_gestational_weight);
+        // $this->datagrid->addColumn($column_current_weight);
+        // $this->datagrid->addColumn($column_height);
+        // $this->datagrid->addColumn($column_reproductive_history);
+        // $this->datagrid->addColumn($column_journey_day);
         $this->datagrid->addColumn($column_cns);
-        $this->datagrid->addColumn($column_medical_record);
-        $this->datagrid->addColumn($column_bolsa_familia);
-        $this->datagrid->addColumn($column_birth_type);
+        // $this->datagrid->addColumn($column_medical_record);
+        // $this->datagrid->addColumn($column_bolsa_familia);
+        // $this->datagrid->addColumn($column_birth_type);
         $this->datagrid->addColumn($column_created_at);
-        $this->datagrid->addColumn($column_updated_at);
+        // $this->datagrid->addColumn($column_updated_at);
 
 
         $action1 = new TDataGridAction(['PacientForm', 'onEdit'], ['id'=>'{id}']);

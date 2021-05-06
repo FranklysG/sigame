@@ -138,7 +138,7 @@ class Forwarding extends TRecord
         $criteria = new TCriteria;
         $criteria->add(new TFilter('forwarding_id', '=', $this->id));
         $repository = new TRepository('Scheduling');
-        $repository->delete($criteria);
+        $repository->load($criteria);
         // store the related Scheduling objects
         if ($this->schedulings)
         {

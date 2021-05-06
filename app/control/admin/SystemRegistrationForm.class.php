@@ -47,7 +47,7 @@ class SystemRegistrationForm extends TPage
         
         $this->form->addAction( _t('Save'),  new TAction([$this, 'onSave']), 'far:save')->{'class'} = 'btn btn-sm btn-primary';
         $this->form->addAction( _t('Clear'), new TAction([$this, 'onClear']), 'fa:eraser red' );
-        // $this->form->addAction( _t('Back'),  new TAction(['LoginForm','onReload']), 'far:arrow-alt-circle-left blue' );
+        $this->form->addAction( _t('Back'),  new TAction(['LoginForm','onLoad']), 'far:arrow-alt-circle-left blue' );
         
         
         $row = $this->form->addFields( [new TLabel(_t('Login')),$login]
@@ -149,7 +149,7 @@ class SystemRegistrationForm extends TPage
             
             TTransaction::close(); // close the transaction
             $pos_action = new TAction(['LoginForm', 'onLoad']);
-            new TMessage('info', _t('Account created'), $pos_action); // shows the success message
+            new TMessage('info', 'Aguarde até que o responsavel libere o acesso a sua conta', $pos_action); // shows the success message
         }
         catch (Exception $e)
         {

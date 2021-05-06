@@ -138,7 +138,7 @@ class Attendance extends TRecord
         $criteria = new TCriteria;
         $criteria->add(new TFilter('attendance_id', '=', $this->id));
         $repository = new TRepository('Forwarding');
-        $repository->delete($criteria);
+        $repository->load($criteria);
         // store the related Forwarding objects
         if ($this->forwardings)
         {

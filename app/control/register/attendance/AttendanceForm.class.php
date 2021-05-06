@@ -14,48 +14,36 @@ class AttendanceForm extends TPage
     public function __construct( $param )
     {
         parent::__construct();
-        
+        parent::setTargetContainer('adianti_right_panel');
         
         // creates the form
         $this->form = new BootstrapFormBuilder('form_Attendance');
-        $this->form->setFormTitle('Attendance');
+        $this->form->setFormTitle('Atendimento do paciente');
+        $this->form->setFieldSizes('100%');
         
 
         // create the form fields
         $id = new TEntry('id');
-        $system_user_id = new TDBUniqueSearch('system_user_id', 'app', 'SystemUser', 'id', 'name');
-        $pacient_id = new TDBUniqueSearch('pacient_id', 'app', 'Pacient', 'id', 'system_user_id');
+        $system_user_id = new TEntry('system_user_id');
+        $pacient_id = new TDBUniqueSearch('pacient_id', 'app', 'Pacient', 'id', 'pacient_name');
+        $pacient_id->addValidation('Paciente', new TRequiredValidator);
+        $pacient_id->setMinLength(0);
 
 
         // add the fields
-        $this->form->addFields( [ new TLabel('N° Atendimento') ], [ $id ] );
-        $this->form->addFields( [ new TLabel('Responsavel') ], [ $system_user_id ] );
-        $this->form->addFields( [ new TLabel('Paciente') ], [ $pacient_id ] );
+        $this->form->addFields( [ new TLabel('N° Atendimento'), $id ] );
+        $this->form->addFields( [ new TLabel('Responsavel'), $system_user_id ] );
+        $this->form->addFields( [ new TLabel('Paciente'), $pacient_id ] );
 
-
-
-        // set sizes
-        $id->setSize('100%');
-        $system_user_id->setSize('100%');
-        $pacient_id->setSize('100%');
-
-
-
-        if (!empty($id))
-        {
-            $id->setEditable(FALSE);
-        }
+        $id->setEditable(FALSE);
+        $system_user_id->setEditable(FALSE);
         
-        /** samples
-         $fieldX->addValidation( 'Field X', new TRequiredValidator ); // add validation
-         $fieldX->setSize( '100%' ); // set size
-         **/
-         
         // create the form actions
-        $btn = $this->form->addAction(_t('Save'), new TAction([$this, 'onSave']), 'fa:save');
+        $btn = $this->form->addAction('Salvar atendimento', new TAction([$this, 'onSave']), 'fa:save');
         $btn->class = 'btn btn-sm btn-primary';
-        $this->form->addActionLink(_t('New'),  new TAction([$this, 'onEdit']), 'fa:eraser red');
-        
+        // $this->form->addActionLink(_t('New'),  new TAction([$this, 'onEdit']), 'fa:eraser red');
+        $this->form->addHeaderActionLink( _t('Close'), new TAction(array($this, 'onClose')), 'fa:times red');
+
         // vertical box container
         $container = new TVBox;
         $container->style = 'width: 100%';
@@ -86,6 +74,7 @@ class AttendanceForm extends TPage
             
             $object = new Attendance;  // create an empty object
             $object->fromArray( (array) $data); // load the object with data
+            $object->system_user_id = TSession::getValue('userid'); 
             $object->store(); // save the object
             
             // get the generated id
@@ -94,7 +83,7 @@ class AttendanceForm extends TPage
             $this->form->setData($data); // fill form data
             TTransaction::close(); // close the transaction
             
-            new TMessage('info', AdiantiCoreTranslator::translate('Record saved'));
+            new TMessage('info', AdiantiCoreTranslator::translate('Record saved'), new TAction(['AttendanceList', 'onReload']));
         }
         catch (Exception $e) // in case of exception
         {
@@ -126,6 +115,7 @@ class AttendanceForm extends TPage
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('app'); // open a transaction
                 $object = new Attendance($key); // instantiates the Active Record
+                $object->system_user_id = $object->system_user->name; // instantiates the Active Record
                 $this->form->setData($object); // fill the form
                 TTransaction::close(); // close the transaction
             }
@@ -139,5 +129,11 @@ class AttendanceForm extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
             TTransaction::rollback(); // undo all pending operations
         }
+    }
+
+    public static function onClose($param)
+    {
+        TScript::create("Template.closeRightPanel()");
+        new TMessage('info', 'Você sera redirecionado para listagem de atendimentos', new TAction(['AttendanceList', 'onReload']));
     }
 }

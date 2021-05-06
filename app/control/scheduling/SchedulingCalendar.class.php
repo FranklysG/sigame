@@ -20,8 +20,11 @@ class SchedulingCalendar extends TPage
     {
         parent::__construct();
         $this->fc = new TFullCalendar(date('Y-m-d'), 'month');
-        $this->fc->setTimeRange( '08:00:00', '17:00:00' );
-        $this->fc->enablePopover( 'Title {title}', '<b>{title}</b> <br> <i class="fa fa-user" aria-hidden="true"></i> {person} <br> {description}');
+        $this->fc->setOption('businessHours', [ [ 'dow' => [ 1, 2, 3, 4, 5 ]]]);
+        $this->fc->setTimeRange('08:00', '17:00');
+        $this->fc->disableDragging();
+        $this->fc->disableResizing();
+        $this->fc->enablePopover( '{ocupation}(a): {title}', '<i class="fa fa-user" aria-hidden="true"></i> {person} <br> <i class="fa fa-clock" aria-hidden="true"></i> {description}');
         
         try {
             TTransaction::open('app');
@@ -29,14 +32,20 @@ class SchedulingCalendar extends TPage
             $criteria->add(new TFilter('date_format(start_time, "%m")', '=', date('m'))); 
             $repository = new TRepository('Scheduling'); 
             $objects = $repository->load($criteria);
-            TTransaction::close();
             
             foreach ($objects as $object) {
-                $obj  = (object) ['title'=>'Event 1',  'person' => 'Mary', 'description' => 'Complementary description'];
-                // $hexaColor = AppUtil::GenerateHexaColor(); 
-                $this->fc->addEvent($object->id, 'Event', $object->start_time, $object->end_time, null, $object->hexacolor, $obj);
+                $pacient_name = $object->forwarding->attendance->pacient->pacient_name;
+                $group_name = SystemGroup::find(TSession::getValue('usergroupids'))->name;
+                $obj  = (object) [ // array do propover
+                    'ocupation' => $group_name,
+                    'title'=> $object->system_user->name,
+                    'person' => $pacient_name,
+                    'description' => Convert::toDate($object->start_time,'H:i')
+                ];
+                $this->fc->addEvent($object->id, $pacient_name, $object->start_time, $object->end_time, null, $object->hexacolor, $obj);
             }
-
+            
+            TTransaction::close();
         } catch (Exeption $e) {
             new TMessage('warning', $e->getMessage());
         }

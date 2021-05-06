@@ -22,27 +22,24 @@ class AttendanceList extends TPage
         
         // creates the form
         $this->form = new BootstrapFormBuilder('form_search_Attendance');
-        $this->form->setFormTitle('Attendance');
+        $this->form->setFormTitle('Área de atendimento');
+        $this->form->setFieldSizes('100%');
         
 
         // create the form fields
         $id = new TEntry('id');
         $system_user_id = new TDBUniqueSearch('system_user_id', 'app', 'SystemUser', 'id', 'name');
+        $system_user_id->setMinLength(1);
         $pacient_id = new TDBUniqueSearch('pacient_id', 'app', 'Pacient', 'id', 'system_user_id');
+        $pacient_id->setMinLength(1);
 
 
         // add the fields
-        $this->form->addFields( [ new TLabel('N° Atendimento') ], [ $id ] );
-        $this->form->addFields( [ new TLabel('Responsavel') ], [ $system_user_id ] );
-        $this->form->addFields( [ new TLabel('Paciente') ], [ $pacient_id ] );
+        $row = $this->form->addFields( [ new TLabel('N° Atendimento'),  $id ],
+                                [ new TLabel('Responsavel'),  $system_user_id ],
+                                [ new TLabel('Paciente'),  $pacient_id ] );
 
-
-        // set sizes
-        $id->setSize('100%');
-        $system_user_id->setSize('100%');
-        $pacient_id->setSize('100%');
-
-        
+        $row->layout = ['col-sm-3','col-sm-3','col-sm-6'];
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__ . '_filter_data') );
         
@@ -59,11 +56,14 @@ class AttendanceList extends TPage
         
 
         // creates the datagrid columns
-        $column_id = new TDataGridColumn('id', 'N° Atendimento', '');
-        $column_system_user_id = new TDataGridColumn('system_user_id', 'Responsavel', 'right');
-        $column_pacient_id = new TDataGridColumn('pacient_id', 'Paciente', 'right');
-        $column_created_at = new TDataGridColumn('created_at', 'Data do Registro', 'left');
+        $column_id = new TDataGridColumn('id', 'N°', 'left');
+        $column_system_user_id = new TDataGridColumn('system_user->name', 'RESPONSAVEL', 'left');
+        $column_pacient_id = new TDataGridColumn('pacient->pacient_name', 'PACIENTE', 'left');
+        $column_created_at = new TDataGridColumn('created_at', 'DT. REGISTRO', 'right');
 
+        $column_created_at->setTransformer(function($value){
+            return Convert::toDate($value);
+        });
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($column_id);
@@ -74,9 +74,11 @@ class AttendanceList extends TPage
 
         $action1 = new TDataGridAction(['AttendanceForm', 'onEdit'], ['id'=>'{id}']);
         $action2 = new TDataGridAction([$this, 'onDelete'], ['id'=>'{id}']);
+        $action3 = new TDataGridAction([$this, 'onForwarding'], ['id'=>'{id}']);
         
         $this->datagrid->addAction($action1, _t('Edit'),   'far:edit blue');
         $this->datagrid->addAction($action2 ,_t('Delete'), 'far:trash-alt red');
+        $this->datagrid->addAction($action3 ,'Criar Encaminhamento', 'far:share-square green');
         
         // create the datagrid model
         $this->datagrid->createModel();
@@ -96,6 +98,28 @@ class AttendanceList extends TPage
         parent::add($container);
     }
     
+    public function onForwarding($param){
+        try {
+            
+            TTransaction::open('app');
+
+            $object = Forwarding::where('attendance_id','=', $param['id'])->first();
+            if(!$object->id)
+                $object = new Forwarding;
+            $object->system_user_id = TSession::getValue('userid');
+            $object->attendance_id = $param['id'];
+            $object->store();
+
+            TTransaction::close();
+            new TMessage('info', 'Encaminhamento criado com sucesso, vá no menu Encaminhamento');
+
+        }catch (Exception $e) // in case of exception
+        {
+            new TMessage('error', $e->getMessage()); // shows the exception error message
+            TTransaction::rollback(); // undo all pending operations
+        }
+    }
+
     /**
      * Inline record editing
      * @param $param Array containing:

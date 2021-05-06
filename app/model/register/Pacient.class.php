@@ -20,7 +20,7 @@ class Pacient extends TRecord
     {
         parent::__construct($id, $callObjectLoad);
         parent::addAttribute('system_user_id');
-        parent::addAttribute('type_paciente_id');
+        parent::addAttribute('pacient_type');
         parent::addAttribute('matrial_status');
         parent::addAttribute('pacient_name');
         parent::addAttribute('mother_name');
@@ -131,7 +131,7 @@ class Pacient extends TRecord
         $criteria = new TCriteria;
         $criteria->add(new TFilter('pacient_id', '=', $this->id));
         $repository = new TRepository('Attendance');
-        $repository->delete($criteria);
+        $repository->load($criteria);
         // store the related Attendance objects
         if ($this->attendances)
         {

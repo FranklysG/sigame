@@ -14,47 +14,39 @@ class ForwardingForm extends TPage
     public function __construct( $param )
     {
         parent::__construct();
+        parent::setTargetContainer('adianti_right_panel');
         
         
         // creates the form
         $this->form = new BootstrapFormBuilder('form_Forwarding');
-        $this->form->setFormTitle('Forwarding');
+        $this->form->setFormTitle('Agendar encaminhamento');
+        $this->form->setFieldSizes('100%');
         
 
         // create the form fields
+        $forwarding_id = new THidden('forwarding_id');
         $id = new TEntry('id');
-        $system_user_id = new TDBUniqueSearch('system_user_id', 'app', 'SystemUser', 'id', 'name');
-        $attendance_id = new TDBUniqueSearch('attendance_id', 'app', 'Attendance', 'id', 'system_user_id');
-
+        $system_user_id = new TEntry('system_user_id');
+        $attendance_id = new TEntry('attendance_id');
+        $start_time = new TDateTime('start_time');
+        $end_time = new TDate('end_time');
 
         // add the fields
-        $this->form->addFields( [ new TLabel('N° Encaminhamento') ], [ $id ] );
-        $this->form->addFields( [ new TLabel('Resposavel') ], [ $system_user_id ] );
-        $this->form->addFields( [ new TLabel('N° Atendimento') ], [ $attendance_id ] );
+        $this->form->addFields( [$forwarding_id] );
+        $this->form->addFields( [ new TLabel('N° Encaminhamento'), $id ] );
+        $this->form->addFields( [ new TLabel('Resposavel'), $system_user_id ] );
+        $this->form->addFields( [ new TLabel('N° Atendimento'), $attendance_id ] );
+        $this->form->addFields( [ new TLabel('Data do exame'), $start_time ] );
 
-
-
-        // set sizes
-        $id->setSize('100%');
-        $system_user_id->setSize('100%');
-        $attendance_id->setSize('100%');
-
-
-
-        if (!empty($id))
-        {
-            $id->setEditable(FALSE);
-        }
+        $id->setEditable(FALSE);
+        $system_user_id->setEditable(FALSE);
+        $attendance_id->setEditable(FALSE);
         
-        /** samples
-         $fieldX->addValidation( 'Field X', new TRequiredValidator ); // add validation
-         $fieldX->setSize( '100%' ); // set size
-         **/
-         
         // create the form actions
-        $btn = $this->form->addAction(_t('Save'), new TAction([$this, 'onSave']), 'fa:save');
-        $btn->class = 'btn btn-sm btn-primary';
-        $this->form->addActionLink(_t('New'),  new TAction([$this, 'onEdit']), 'fa:eraser red');
+        // $btn = $this->form->addAction(_t('Save'), new TAction([$this, 'onSave']), 'fa:save');
+        // $btn->class = 'btn btn-sm btn-primary';
+        $this->form->addAction('Criar agendamento',  new TAction([$this, 'onScheduling']), 'fa:calendar-plus green');
+        $this->form->addHeaderActionLink( _t('Close'), new TAction(array($this, 'onClose')), 'fa:times red');
         
         // vertical box container
         $container = new TVBox;
@@ -65,44 +57,52 @@ class ForwardingForm extends TPage
         parent::add($container);
     }
 
-    /**
-     * Save form data
-     * @param $param Request
-     */
-    public function onSave( $param )
-    {
-        try
-        {
+    public function onScheduling($param){
+        try {
             TTransaction::open('app'); // open a transaction
-            
-            /**
-            // Enable Debug logger for SQL operations inside the transaction
-            TTransaction::setLogger(new TLoggerSTD); // standard output
-            TTransaction::setLogger(new TLoggerTXT('log.txt')); // file
-            **/
-            
+           
             $this->form->validate(); // validate form data
             $data = $this->form->getData(); // get form data as array
+            $holiday = Holiday::where('date(date)','=', date('Y-m-d', strtotime($data->start_time)))->where('type_code','NOT IN', [3,1])->first();
             
-            $object = new Forwarding;  // create an empty object
-            $object->fromArray( (array) $data); // load the object with data
-            $object->store(); // save the object
-            
-            // get the generated id
-            $data->id = $object->id;
-            
-            $this->form->setData($data); // fill form data
-            TTransaction::close(); // close the transaction
-            
-            new TMessage('info', AdiantiCoreTranslator::translate('Record saved'));
+            if(empty($holiday)){
+                $object = Scheduling::where('forwarding_id','=',$data->id)->first();
+                if(!$object)
+                    $object = new Scheduling;  // create an empty object
+                $object->system_user_id = TSession::getValue('userid');
+                $object->forwarding_id = $data->id;
+                $object->hexacolor = AppUtil::GenerateHexaColor();
+                $object->start_time = $data->start_time;
+                $object->end_time = date('Y-m-d H:i:s', strtotime('+20 min', strtotime($data->start_time)));
+                $object->store(); // save the object
+                
+                $forwarding = Forwarding::find($data->id);
+                if(!$forwarding)
+                    $forwarding = new Forwarding;  // create an empty object
+                $forwarding->fromArray( (array) $data); // load the object with data
+                $forwarding->system_user_id = TSession::getValue('userid');
+                $forwarding->store(); // save the object
+
+                // get the generated id
+                $data->id = $object->id;
+                
+                $this->form->setData($data); // fill form data
+                TTransaction::close(); // close the transaction
+                
+                new TMessage('info', 'Agendamento criado com sucesso você sera redirecionado ao calendario');
+                // AdiantiCoreApplication::loadPage('SchedulingCalendar');
+            }else{
+                throw new Exception('Parece que essa data é um feriado', 1);
+            }
         }
         catch (Exception $e) // in case of exception
         {
-            new TMessage('error', $e->getMessage()); // shows the exception error message
-            $this->form->setData( $this->form->getData() ); // keep form data
+
+            new TMessage('warning', $e->getMessage()); // shows the exception error message
             TTransaction::rollback(); // undo all pending operations
         }
     }
+
     
     /**
      * Clear form data
@@ -121,11 +121,15 @@ class ForwardingForm extends TPage
     {
         try
         {
+        
             if (isset($param['key']))
             {
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('app'); // open a transaction
                 $object = new Forwarding($key); // instantiates the Active Record
+                $object->system_user_id = $object->system_user->name; // instantiates the Active Record
+                $object->forwarding_id = $object->id; // instantiates the Active Record// instantiates the Active Record
+                TForm::sendData('form_Forwarding', $object->start_time);
                 $this->form->setData($object); // fill the form
                 TTransaction::close(); // close the transaction
             }
@@ -139,5 +143,11 @@ class ForwardingForm extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
             TTransaction::rollback(); // undo all pending operations
         }
+    }
+
+    public static function onClose($param)
+    {
+        TScript::create("Template.closeRightPanel()");
+        new TMessage('info', 'Você sera redirecionado para listagem de Encaminhamentos', new TAction(['ForwardingList', 'onReload']));
     }
 }
