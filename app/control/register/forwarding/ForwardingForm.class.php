@@ -124,7 +124,7 @@ class ForwardingForm extends TPage
         
             if (isset($param['key']))
             {
-                $key = $param['key'];  // get the parameter $key
+                $key = $param['key'];   // get the parameter $key
                 TTransaction::open('app'); // open a transaction
                 $object = new Forwarding($key); // instantiates the Active Record
                 $object->system_user_id = $object->system_user->name; // instantiates the Active Record
