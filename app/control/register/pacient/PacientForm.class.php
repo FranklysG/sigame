@@ -106,15 +106,12 @@ class PacientForm extends TPage
         $this->form->addFields( [ new TLabel('TIPO DE PARTO'), $birth_type ] );
 
         $id->setEditable(FALSE);
-        if (!empty($id))
-        {
-        }
+       
         
-        /** samples
-         $fieldX->addValidation( 'Field X', new TRequiredValidator ); // add validation
-         $fieldX->setSize( '100%' ); // set size
-         **/
-         
+        if(isset($param['form_editable']))
+            $this->form->setEditable(false);
+        
+
         // create the form actions
         $btn = $this->form->addAction(_t('Save'), new TAction([$this, 'onSave']), 'fa:save');
         $btn->class = 'btn btn-sm btn-primary';
@@ -265,6 +262,11 @@ class PacientForm extends TPage
     public static function onClose($param)
     {
         TScript::create("Template.closeRightPanel()");
-        new TMessage('info', 'Você sera redirecionado para listagem de pacientes', new TAction(['PacientList', 'onReload']));
+        if(isset($param['register_state'])){
+            new TMessage('info', 'Você sera redirecionado para o <strong>AGENDAMENTO</strong> de clinetes', new TAction(['SchedulingCalendar', 'onReload']));
+        }else{
+            new TMessage('info', 'Você sera redirecionado para <strong>LISTAGEM</strong> de pacientes', new TAction(['PacientList', 'onReload']));
+        }
+               
     }
 }

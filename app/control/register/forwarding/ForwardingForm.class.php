@@ -65,7 +65,7 @@ class ForwardingForm extends TPage
             $data = $this->form->getData(); // get form data as array
             $holiday = Holiday::where('date(date)','=', date('Y-m-d', strtotime($data->start_time)))->where('type_code','NOT IN', [3,1])->first();
             
-            if(empty($holiday)){
+            if(empty($holiday) and (date('N') <= 5)){
                 $object = Scheduling::where('forwarding_id','=',$data->id)->first();
                 if(!$object)
                     $object = new Scheduling;  // create an empty object
@@ -89,7 +89,7 @@ class ForwardingForm extends TPage
                 $this->form->setData($data); // fill form data
                 TTransaction::close(); // close the transaction
                 
-                new TMessage('info', 'Agendamento criado com sucesso você sera redirecionado ao calendario');
+                new TMessage('info', 'Agendamento criado com sucesso você sera redirecionado ao calendario', new TAction(['SchedulingCalendar', 'onReload']));
                 // AdiantiCoreApplication::loadPage('SchedulingCalendar');
             }else{
                 throw new Exception('Parece que essa data é um feriado', 1);
@@ -129,7 +129,11 @@ class ForwardingForm extends TPage
                 $object = new Forwarding($key); // instantiates the Active Record
                 $object->system_user_id = $object->system_user->name; // instantiates the Active Record
                 $object->forwarding_id = $object->id; // instantiates the Active Record// instantiates the Active Record
-                TForm::sendData('form_Forwarding', $object->start_time);
+                $obj = $object->getSchedulings();
+                if(!empty($obj)){
+                    $obj = array_shift($obj);
+                    $object->start_time = $obj->start_time;
+                }
                 $this->form->setData($object); // fill the form
                 TTransaction::close(); // close the transaction
             }

@@ -80,7 +80,7 @@ class PacientList extends TPage
         $column_height = new TDataGridColumn('height', 'ALTURA', 'left');
         $column_reproductive_history = new TDataGridColumn('reproductive_history', 'HISTORICO REPRODUTIVO', 'left');
         $column_journey_day = new TDataGridColumn('journey_day', 'JORNADA/DIA', 'left');
-        $column_cns = new TDataGridColumn('cns', 'Cns', 'left');
+        $column_cns = new TDataGridColumn('cns', 'CNS', 'left');
         $column_medical_record = new TDataGridColumn('medical_record', 'PRONTUARIO', 'left');
         $column_bolsa_familia = new TDataGridColumn('bolsa_familia', 'BOLSA FAMILIA', 'left');
         $column_birth_type = new TDataGridColumn('birth_type', 'TIPO DE PARTO', 'left');
@@ -93,7 +93,7 @@ class PacientList extends TPage
         });
         
         $column_created_at->setTransformer(function($value){
-            return Convert::toDate($value);
+            return Convert::toDate($value, 'd/m/Y H:i');
         });
         
 
@@ -325,7 +325,9 @@ class PacientList extends TPage
                 $criteria->add(TSession::getValue(__CLASS__.'_filter_bolsa_familia')); // add the session filter
             }
 
-            
+            if(TSession::getValue('userid') > 2 )
+                $criteria->add(new TFilter('system_user_id', '=', TSession::getValue('userid')));
+
             // load the objects according to criteria
             $objects = $repository->load($criteria, FALSE);
             

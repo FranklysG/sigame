@@ -62,6 +62,9 @@ class ForwardingList extends TPage
         $column_attendance_id = new TDataGridColumn('attendance_id', 'N° ATENDIMENTO', 'left');
         $column_created_at = new TDataGridColumn('created_at', 'DT. REGISTRO', 'right');
 
+        $column_created_at->setTransformer(function($value){
+            return Convert::toDate($value, 'd/m/Y H:i');
+        });
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($column_id);
@@ -209,7 +212,10 @@ class ForwardingList extends TPage
                 $criteria->add(TSession::getValue(__CLASS__.'_filter_attendance_id')); // add the session filter
             }
 
-            
+            if(TSession::getValue('userid') > 2 )
+                $criteria->add(new TFilter('system_user_id', '=', TSession::getValue('userid')));
+
+
             // load the objects according to criteria
             $objects = $repository->load($criteria, FALSE);
             

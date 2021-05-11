@@ -62,7 +62,7 @@ class AttendanceList extends TPage
         $column_created_at = new TDataGridColumn('created_at', 'DT. REGISTRO', 'right');
 
         $column_created_at->setTransformer(function($value){
-            return Convert::toDate($value);
+            return Convert::toDate($value, 'd/m/Y H:i');
         });
 
         // add the columns to the DataGrid
@@ -104,14 +104,14 @@ class AttendanceList extends TPage
             TTransaction::open('app');
 
             $object = Forwarding::where('attendance_id','=', $param['id'])->first();
-            if(!$object->id)
+            if(!$object)
                 $object = new Forwarding;
             $object->system_user_id = TSession::getValue('userid');
             $object->attendance_id = $param['id'];
             $object->store();
 
             TTransaction::close();
-            new TMessage('info', 'Encaminhamento criado com sucesso, vá no menu Encaminhamento');
+            new TMessage('info', 'Encaminhamento criado com sucesso, você sera redirecionado para <strong>ENCAMINHAMENTOS</strong>', new TAction(['ForwardingList', 'onReload']));
 
         }catch (Exception $e) // in case of exception
         {
@@ -235,7 +235,9 @@ class AttendanceList extends TPage
                 $criteria->add(TSession::getValue(__CLASS__.'_filter_pacient_id')); // add the session filter
             }
 
-            
+            if(TSession::getValue('userid') > 2 )
+                $criteria->add(new TFilter('system_user_id', '=', TSession::getValue('userid')));
+
             // load the objects according to criteria
             $objects = $repository->load($criteria, FALSE);
             
