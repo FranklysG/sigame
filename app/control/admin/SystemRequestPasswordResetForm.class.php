@@ -40,7 +40,7 @@ class SystemRequestPasswordResetForm extends TPage
         $this->form->addFields( [$user, $login] );
         
         $btn = $this->form->addAction(_t('Send'), new TAction(array($this, 'onRequest')), '');
-        $btn->class = 'btn btn-primary';
+        $btn->class = 'btn bg-purple';
         $btn->style = 'height: 40px;width: 90%;display: block;margin: auto;font-size:17px;';
         
         $wrapper = new TElement('div');

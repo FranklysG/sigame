@@ -47,7 +47,7 @@ class SystemDocumentCategoryFormList extends TPage
         
         // create the form actions
         $btn = $this->form->addAction(_t('Save'), new TAction(array($this, 'onSave')), 'far:save');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         $this->form->addAction(_t('Clear form'),  new TAction(array($this, 'onEdit')), 'fa:eraser red');
         
         // creates a DataGrid

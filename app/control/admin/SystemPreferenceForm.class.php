@@ -76,7 +76,7 @@ class SystemPreferenceForm extends TStandardForm
         $this->form->addFields( [new TLabel(''), $this->frame] );
         
         $btn = $this->form->addAction(_t('Save'), new TAction(array($this, 'onSave')), 'far:save');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         
         $container = new TVBox;
         $container->{'style'} = 'width: 100%;';

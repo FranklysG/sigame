@@ -54,7 +54,7 @@ class SystemProgramList extends TStandardList
         
         // add the search form actions
         $btn = $this->form->addAction(_t('Find'), new TAction(array($this, 'onSearch')), 'fa:search');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         $this->form->addAction(_t('New'),  new TAction(array('SystemProgramForm', 'onEdit')), 'fa:plus green');
         
         // creates a DataGrid

@@ -44,7 +44,7 @@ class SystemSharedDocumentList extends TPage
         
         // add the search form actions
         $btn = $this->form->addAction(_t('Find'), new TAction(array($this, 'onSearch')), 'fa:search');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         
         // creates the cards
         $this->card = new TCardView;

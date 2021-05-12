@@ -35,7 +35,7 @@ class SystemRegistrationForm extends TPage
         $criteria = new TCriteria();
         $criteria->add(new TFilter('id','NOT IN',[1,2]));
         $group_id       = new TDBCombo('group_id','permission','SystemGroup','id','name', null, $criteria);
-        $group_id->addValidation( 'Formação', new TRequiredValidator);
+        $group_id->addValidation( 'Ocupação', new TRequiredValidator);
         $unit_id       = new TDBCombo('unit_id','permission','SystemUnit','id','name');
         $unit_id->addValidation( 'Unidade', new TRequiredValidator);
         $email      = new TEntry('email');
@@ -45,14 +45,14 @@ class SystemRegistrationForm extends TPage
         $repassword = new TPassword('repassword');
         $repassword->addValidation( _t('Password confirmation'), new TRequiredValidator);
         
-        $this->form->addAction( _t('Save'),  new TAction([$this, 'onSave']), 'far:save')->{'class'} = 'btn btn-sm btn-primary';
+        $this->form->addAction( _t('Save'),  new TAction([$this, 'onSave']), 'far:save')->{'class'} = 'btn btn-sm bg-purple';
         $this->form->addAction( _t('Clear'), new TAction([$this, 'onClear']), 'fa:eraser red' );
         $this->form->addAction( _t('Back'),  new TAction(['LoginForm','onLoad']), 'far:arrow-alt-circle-left blue' );
         
         
         $row = $this->form->addFields( [new TLabel(_t('Login')),$login]
                                 ,[new TLabel(_t('Name')), $name]
-                                ,[new TLabel('Formação'), $group_id]
+                                ,[new TLabel('Ocupação'), $group_id]
                                 ,[new TLabel('Unidade'), $unit_id]
                                 ,[new TLabel(_t('Email')),$email]
                                 ,[new TLabel(_t('Password')), $password]

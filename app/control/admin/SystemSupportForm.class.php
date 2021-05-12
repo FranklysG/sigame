@@ -48,7 +48,7 @@ class SystemSupportForm extends TWindow
         
         // create the form actions
         $btn = $this->form->addQuickAction(_t('Send'), new TAction(array($this, 'onSend')), 'far:envelope');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         $this->form->addQuickAction(_t('Clear form'),  new TAction(array($this, 'onClear')), 'fa:eraser red');
         
         // vertical box container

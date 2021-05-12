@@ -37,7 +37,7 @@ class SystemDocumentUploadForm extends TPage
         $filename->addValidation( _t('File'), new TRequiredValidator );
         
         $btn = $this->form->addAction(_t('Next'), new TAction(array($this, 'onNext')), 'far:arrow-alt-circle-right');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         
         // vertical box container
         $container = new TVBox;

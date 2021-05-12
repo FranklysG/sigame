@@ -52,7 +52,7 @@ class SystemChangeLogView extends TStandardList
         $this->form->setData( TSession::getValue('SystemChangeLogView_filter_data') );
         
         $btn = $this->form->addAction(_t('Search'), new TAction(array($this, 'onSearch')), 'fa:search');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         
         $this->formgrid = new TForm;
         

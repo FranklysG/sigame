@@ -53,7 +53,7 @@ class SystemUnitForm extends TStandardForm
         
         // create the form actions
         $btn = $this->form->addAction(_t('Save'), new TAction(array($this, 'onSave')), 'far:save');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         $this->form->addActionLink(_t('Clear'),  new TAction(array($this, 'onEdit')), 'fa:eraser red');
         $this->form->addActionLink(_t('Back'),new TAction(array('SystemUnitList','onReload')),'far:arrow-alt-circle-left blue');
         

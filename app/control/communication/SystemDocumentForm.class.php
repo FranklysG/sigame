@@ -70,7 +70,7 @@ class SystemDocumentForm extends TPage
         
         // create the form actions
         $btn = $this->form->addAction(_t('Save'), new TAction(array($this, 'onSave')), 'far:save');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         $this->form->addAction(_t('Clear'),  new TAction(array($this, 'onClear')), 'fa:eraser red');
         
         // vertical box container

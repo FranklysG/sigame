@@ -186,7 +186,7 @@ class SystemDataBrowser extends TPage
             // create panel group around datagrid
             $panel = new TPanelGroup($database . ' > ' . $table);
             $button = $panel->addHeaderActionLink("SQL", new TAction(["SystemSQLPanel", "onLoad"], ["database" => $database, "table" => $table]), "fa:code");
-            $button->class = "btn btn-primary";
+            $button->class = "btn bg-purple";
             
             $panel->add($this->datagrid);
             $panel->addFooter($this->pageNavigation);

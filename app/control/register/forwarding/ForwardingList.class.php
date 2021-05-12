@@ -46,7 +46,7 @@ class ForwardingList extends TPage
         
         // add the search form actions
         $btn = $this->form->addAction(_t('Find'), new TAction([$this, 'onSearch']), 'fa:search');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         // $this->form->addActionLink(_t('New'), new TAction(['ForwardingForm', 'onEdit']), 'fa:plus green');
         
         // creates a Datagrid

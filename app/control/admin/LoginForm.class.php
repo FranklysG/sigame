@@ -93,9 +93,12 @@ class LoginForm extends TPage
             $row->layout = ['col-sm-12 display-flex'];
         }
         
-        $btn = $this->form->addAction(_t('Log in'), new TAction(array($this, 'onLogin')), '');
-        $btn->class = 'btn btn-primary';
-        $btn->style = 'height: 40px;width: 90%;display: block;margin: auto;font-size:17px;';
+        $btn = $this->form->addAction('Entrar', new TAction(array($this, 'onLogin')), '');
+        $btn->class = 'btn text-white d-inline-block';
+        $btn->style = 'height: 40px;width: 49%;margin: 0 auto;font-size:17px;background:#9c27b0;';
+        $btn_register = $this->form->addAction('Registrar', new TAction(array('SystemRegistrationForm', 'onClear')), '');
+        $btn_register->class = 'btn text-white d-inline-block';
+        $btn_register->style = 'height: 40px;width: 45%;margin: 0 10px;font-size:17px;background:#9c27b0;';
         
         $wrapper = new TElement('div');
         $wrapper->style = 'margin:auto; margin-top:100px;max-width:460px;';

@@ -51,7 +51,7 @@ class SystemPasswordResetForm extends TPage
         $this->form->addFields( [$locker, $password2] );
         
         $btn = $this->form->addAction(_t('Send'), new TAction(array($this, 'onReset')), '');
-        $btn->class = 'btn btn-primary';
+        $btn->class = 'btn bg-purple';
         $btn->style = 'height: 40px;width: 90%;display: block;margin: auto;font-size:17px;';
         
         $wrapper = new TElement('div');

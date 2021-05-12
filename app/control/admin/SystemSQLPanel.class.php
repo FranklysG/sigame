@@ -36,7 +36,7 @@ class SystemSQLPanel extends TPage
         $this->form->addFields( [ $ls=new TLabel('SELECT')], [$select] );
         
         $btn = $this->form->addAction( _t('Generate'), new TAction(array($this, 'onGenerate')), 'fa:check-circle');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         
         $this->form->addAction( 'CSV', new TAction(array($this, 'onExportCSV')), 'fa:table');
         

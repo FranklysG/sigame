@@ -44,7 +44,7 @@ class ForwardingForm extends TPage
         
         // create the form actions
         // $btn = $this->form->addAction(_t('Save'), new TAction([$this, 'onSave']), 'fa:save');
-        // $btn->class = 'btn btn-sm btn-primary';
+        // $btn->class = 'btn btn-sm bg-purple';
         $this->form->addAction('Criar agendamento',  new TAction([$this, 'onScheduling']), 'fa:calendar-plus green');
         $this->form->addHeaderActionLink( _t('Close'), new TAction(array($this, 'onClose')), 'fa:times red');
         

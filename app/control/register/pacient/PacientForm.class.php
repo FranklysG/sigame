@@ -114,7 +114,7 @@ class PacientForm extends TPage
 
         // create the form actions
         $btn = $this->form->addAction(_t('Save'), new TAction([$this, 'onSave']), 'fa:save');
-        $btn->class = 'btn btn-sm btn-primary';
+        $btn->class = 'btn btn-sm bg-purple';
         $this->form->addActionLink(_t('New'),  new TAction([$this, 'onEdit']), 'fa:eraser red');
         $this->form->addHeaderActionLink( _t('Close'), new TAction(array($this, 'onClose')), 'fa:times red');
         // vertical box container
