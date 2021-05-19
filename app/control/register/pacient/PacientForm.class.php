@@ -187,12 +187,6 @@ class PacientForm extends TPage
         {
             TTransaction::open('app'); // open a transaction
             
-            /**
-            // Enable Debug logger for SQL operations inside the transaction
-            TTransaction::setLogger(new TLoggerSTD); // standard output
-            TTransaction::setLogger(new TLoggerTXT('log.txt')); // file
-            **/
-            
             $this->form->validate(); // validate form data
             $data = $this->form->getData(); // get form data as array
             
