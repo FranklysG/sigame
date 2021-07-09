@@ -12,20 +12,23 @@ Para rodar o projeto no seu ambiente local, você precisará basicamente das seg
 
 Agora algumas imagens de como esta o projeto finalizado
 
-<!-- - Splash page:
-<img src="https://github.com/FranklysG/nlw5/blob/main/assets/readme/splash_page.png" height="400px">
+- Login Page:
+<img src="https://github.com/FranklysG/sigame/blob/main/app/images/readme/loginPage.png" height="400px">
 
 
-- Home page:
-<img src="https://github.com/FranklysG/nlw5/blob/main/assets/readme/home_page.png" height="400px">
+- Register Page:
+<img src="https://github.com/FranklysG/sigame/blob/main/app/images/readme/registerPage.png" height="400px">
 
 
-- Challenge page:
-<img src="https://github.com/FranklysG/nlw5/blob/main/assets/readme/challenge_page.png" height="400px">
+- Calendar Page:
+<img src="https://github.com/FranklysG/sigame/blob/main/app/images/readme/calendarPage.png" height="400px">
 
 
-- Result page:
-<img src="https://github.com/FranklysG/nlw5/blob/main/assets/readme/result_page.png" height="400px"> -->
+- Dashboard Page:
+<img src="https://github.com/FranklysG/sigame/blob/main/app/images/readme/dashboardPage.png" height="400px">
+
+- Cadastro Paciente Page:
+<img src="https://github.com/FranklysG/sigame/blob/main/app/images/readme/cadastroPaciente.png" height="400px">
 
 ## 📌 Find me!
 - Instagram: https://www.instagram.com/franklysg/
